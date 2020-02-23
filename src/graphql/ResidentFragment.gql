@@ -1,0 +1,16 @@
+fragment Resident on Resident {
+  id
+  mobile
+  points
+  credit
+  user {
+    id
+    name
+    sex
+  }
+  children {
+    id
+    name
+    sex
+  }
+}

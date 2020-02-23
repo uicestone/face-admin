@@ -1,0 +1,15 @@
+#import "./CommunityFragment.gql"
+
+mutation community(
+  $where: CommunityWhereUniqueInput!
+  $create: CommunityCreateInput!
+  $update: CommunityUpdateInput!
+) {
+  community: upsertOneCommunity(
+    where: $where
+    create: $create
+    update: $update
+  ) {
+    ...Community
+  }
+}

@@ -1,0 +1,38 @@
+fragment PassRecord on PassRecord {
+  id
+  status
+  date
+  slots
+  remarks
+  assured
+  createdAt
+  services {
+    service {
+      id
+      name
+      slotsCount
+    }
+  }
+  store {
+    id
+    name
+    slots
+  }
+  child {
+    id
+    name
+    sex
+  }
+  customer {
+    id
+    mobile
+    user {
+      id
+      name
+    }
+  }
+  payments {
+    amount
+    paid
+  }
+}

@@ -1,0 +1,31 @@
+.notifications.vue-notifyjs {
+  .alert {
+    z-index: 1000;
+    position: fixed;
+    width: 200px;
+    min-height: 50px;
+    color: rgba(255, 255, 255, 0.7);
+    span[data-notify="icon"] {
+      margin-top: -16px;
+    }
+    span[data-notify="message"] {
+      min-height: 30px;
+      padding-top: 6px;
+    }
+  }
+  .notification-list-move {
+    transition: transform 0.3s, opacity 0.4s;
+  }
+  .notification-list-item {
+    display: inline-block;
+    margin-right: 10px;
+
+  }
+  .notification-list-enter-active, .notification-list-leave-active {
+    transition: opacity 0.4s;
+  }
+  .notification-list-enter, .notification-list-leave-to /* .list-leave-active for <2.1.8 */
+  {
+    opacity: 0;
+  }
+}

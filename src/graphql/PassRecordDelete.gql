@@ -1,0 +1,9 @@
+#import "./BookingFragment.gql"
+
+mutation passRecord($id: Int!) {
+  passRecord: delete_passRecord(where: { id: { _eq: $id } }) {
+    returning {
+      ...passRecord
+    }
+  }
+}

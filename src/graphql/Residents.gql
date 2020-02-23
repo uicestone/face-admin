@@ -1,0 +1,12 @@
+#import "./CustomerFragment.gql"
+
+query customers($limit: Int, $offset: Int, $where: customer_bool_exp) {
+  customers: customer(first: $limit, skip: $offset, where: $where) {
+    ...customer
+  }
+  # totalCount: customer_aggregate (where: $where) {
+  #   aggregate {
+  #     count
+  #   }
+  # }
+}

@@ -1,0 +1,18 @@
+#import "./CustomerFragment.gql"
+
+mutation customer ($data: customer_insert_input!) {
+  customer: insert_customer (objects: [$data], on_conflict: {
+      constraint: PK_a7a13f4cacb744524e44dfdad32,
+      update_columns: [
+        id,
+        mobile,
+        points,
+        credit,
+        userId
+      ]
+    }) {
+    returning {
+      ... customer
+    }
+  }
+}

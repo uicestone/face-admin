@@ -1,0 +1,12 @@
+#import "./UserFragment.gql"
+
+query users($limit: Int, $offset: Int, $where: UserWhereInput) {
+  users: users(first: $limit, skip: $offset, where: $where) {
+    ...User
+  }
+  # totalCount: user_aggregate(where: $where) {
+  #   aggregate {
+  #     count
+  #   }
+  # }
+}

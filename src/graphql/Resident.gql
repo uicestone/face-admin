@@ -1,0 +1,7 @@
+#import "./CustomerFragment.gql"
+
+query customer ($id: Int!) {
+  customer: customer_by_pk (id: $id) {
+    ...customer
+  }
+}

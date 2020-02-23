@@ -1,0 +1,9 @@
+#import "./UserFragment.gql"
+
+mutation user ($id: Int!, $set: user_set_input) {
+  user: update_user (where: {id: {_eq: $id}}, _set: $set) {
+    returning {
+      ...user
+    }
+  }
+}

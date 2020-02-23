@@ -1,0 +1,17 @@
+#import "./BookingFragment.gql"
+
+query bookings($limit: Int, $offset: Int, $where: booking_bool_exp) {
+  bookings: booking(
+    first: $limit
+    skip: $offset
+    where: $where
+    orderBy: { createdAt: desc }
+  ) {
+    ...booking
+  }
+  # totalCount: booking_aggregate (where: $where) {
+  #   aggregate {
+  #     count
+  #   }
+  # }
+}

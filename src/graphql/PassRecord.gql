@@ -1,0 +1,7 @@
+#import "./BookingFragment.gql"
+
+query passRecord($id: Int!) {
+  passRecord: passRecord_by_pk(id: $id) {
+    ...passRecord
+  }
+}

@@ -1,0 +1,7 @@
+#import "./CommunityFragment.gql"
+
+query community($id: String!) {
+  community: community(where: { id: $id }) {
+    ...Community
+  }
+}

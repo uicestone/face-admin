@@ -1,0 +1,12 @@
+#import "./CommunityFragment.gql"
+
+query communities($limit: Int, $offset: Int, $order_by: CommunityOrderByInput) {
+  communities: communities(first: $limit, skip: $offset, orderBy: $order_by) {
+    ...Community
+  }
+  # totalCount: community_aggregate {
+  #   aggregate {
+  #     count
+  #   }
+  # }
+}
