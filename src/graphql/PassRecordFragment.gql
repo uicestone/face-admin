@@ -1,38 +1,19 @@
 fragment PassRecord on PassRecord {
   id
-  status
+  direction
+  allow
   date
-  slots
-  remarks
-  assured
-  createdAt
-  services {
-    service {
-      id
-      name
-      slotsCount
-    }
-  }
-  store {
+  community {
     id
     name
-    slots
   }
-  child {
+  resident {
     id
     name
-    sex
-  }
-  customer {
-    id
-    mobile
-    user {
+    unit {
       id
-      name
+      building
+      room
     }
-  }
-  payments {
-    amount
-    paid
   }
 }

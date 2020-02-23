@@ -1,16 +1,15 @@
 fragment Resident on Resident {
   id
-  mobile
-  points
-  credit
-  user {
+  level
+  name
+  age
+  unit {
     id
-    name
-    sex
+    building
+    room
   }
-  children {
+  community {
     id
     name
-    sex
   }
 }

@@ -1,0 +1,11 @@
+#import "./UserFragment.gql"
+
+mutation user(
+  $where: UserWhereUniqueInput!
+  $create: UserCreateInput!
+  $update: UserUpdateInput!
+) {
+  user: upsertOneUser(where: $where, create: $create, update: $update) {
+    ...User
+  }
+}

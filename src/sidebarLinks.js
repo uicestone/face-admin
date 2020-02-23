@@ -137,14 +137,14 @@ const examples = [
 
 const production = [
   {
-    name: "预约管理",
-    icon: "nc-icon nc-scissors",
-    path: "/booking/list"
+    name: "通行记录",
+    icon: "nc-icon nc-share-66",
+    path: "/pass-record/list"
   },
   {
-    name: "客户管理",
+    name: "居民管理",
     icon: "nc-icon nc-satisfied",
-    path: "/customer/list"
+    path: "/resident/list"
   },
   {
     name: "后台用户",

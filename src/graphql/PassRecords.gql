@@ -1,15 +1,14 @@
-#import "./BookingFragment.gql"
+#import "./PassRecordFragment.gql"
 
-query bookings($limit: Int, $offset: Int, $where: booking_bool_exp) {
-  bookings: booking(
+query passRecords($limit: Int, $offset: Int, $where: PassRecordWhereInput) {
+  passRecords: passRecords(
     first: $limit
     skip: $offset
-    where: $where
-    orderBy: { createdAt: desc }
+    where: $where # orderBy: { createdAt: desc }
   ) {
-    ...booking
+    ...PassRecord
   }
-  # totalCount: booking_aggregate (where: $where) {
+  # totalCount: passRecord_aggregate (where: $where) {
   #   aggregate {
   #     count
   #   }

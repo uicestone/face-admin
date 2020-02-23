@@ -1,7 +1,7 @@
 #import "./UserFragment.gql"
 
-query user ($id: Int!) {
-  user: user_by_pk (id: $id) {
-    ...user
+query user($id: String!) {
+  user: user(where: { id: $id }) {
+    ...User
   }
 }

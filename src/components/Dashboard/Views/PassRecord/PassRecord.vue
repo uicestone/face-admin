@@ -1,104 +1,40 @@
-<template>
-  <div class="row">
-    <div class="offset-md-2 col-lg-8 col-md-7">
-      <div class="card mt-5">
-        <div class="card-header">
-          <h4 class="title mt-3 mb-3 ml-3">通行记录</h4>
-        </div>
-        <div class="card-body p-4">
-          <form>
-            <div class="row">
-              <div class="col-md-4">
-                <label>居民</label>
-                <el-select
-                  v-model="passRecord.resident"
-                  value-key="id"
-                  placeholder="搜索居民"
-                  filterable
-                  remote
-                  :remote-method="searchCustomers"
-                >
-                  <el-option
-                    v-if="!residents.length"
-                    :key="passRecord.resident.id"
-                    :label="passRecord.resident.name"
-                    :value="passRecord.resident"
-                  >
-                  </el-option>
-                  <el-option
-                    v-for="item in residents"
-                    :key="item.id"
-                    :label="item.user.name"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group has-label">
-                  <label>日期</label>
-                  <el-date-picker
-                    v-model="passRecord.date"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd"
-                  >
-                  </el-date-picker>
-                </div>
-              </div>
-            </div>
+<template lang="pug">
+  .row
+    .offset-md-2.col-lg-8.col-md-7
+      .card.mt-5
+        .card-header
+          h4.title.mt-3.mb-3.ml-3 通行记录
+        .card-body.p-4
+          form
+            .row
+              .col-md-4
+                label 居民
+                el-select(v-model='passRecord.resident', value-key='id', placeholder='搜索居民', filterable='', remote='', :remote-method='searchCustomers')
+                  el-option(v-if='!residents.length', :key='passRecord.resident.id', :label='passRecord.resident.name', :value='passRecord.resident')
+                  el-option(v-for='item in residents', :key='item.id', :label='item.user.name', :value='item')
+              .col-md-4
+                .form-group.has-label
+                  label 日期
+                  el-date-picker(v-model='passRecord.date', type='date', placeholder='选择日期', value-format='yyyy-MM-dd')
+              .col-md-4
+                .form-group.has-label
+                  label 小区
+                  el-select(v-model='passRecord.community', value-key='id', placeholder='选择小区', size='medium')
+                    el-option(v-for='community in communities', :key='community.id', :label='community.name', :value='community')
+            .text-center.mt-3
+              button.btn.btn-info.btn-fill.btn-wd(type='submit', @click.prevent='save')
+                | {{ passRecord.id ? "更新通行记录" : "新增通行记录" }}
+              button.btn.btn-danger.btn-fill.btn-wd(v-if='!passRecord.payments', @click.prevent='remove')
+                | 删除
+            .clearfix
 
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group has-label">
-                  <label>小区</label>
-                  <el-select
-                    v-model="passRecord.community"
-                    value-key="id"
-                    placeholder="选择小区"
-                    size="medium"
-                  >
-                    <el-option
-                      v-for="community in communities"
-                      :key="community.id"
-                      :label="community.name"
-                      :value="community"
-                    >
-                    </el-option>
-                  </el-select>
-                </div>
-              </div>
-            </div>
-
-            <div class="text-center mt-3">
-              <button
-                type="submit"
-                class="btn btn-info btn-fill btn-wd"
-                @click.prevent="save"
-              >
-                {{ passRecord.id ? "更新通行记录" : "新增通行记录" }}
-              </button>
-              <button
-                v-if="!passRecord.payments"
-                class="btn btn-danger btn-fill btn-wd"
-                @click.prevent="remove"
-              >
-                删除
-              </button>
-            </div>
-            <div class="clearfix"></div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 <script>
-import PASSRECORD from "src/graphql/Booking.gql";
-import PASSRECORD_UPSERT from "src/graphql/BookingUpsert.gql";
-import PASSRECORD_DELETE from "src/graphql/BookingDelete.gql";
-import COMMUNITYS from "src/graphql/Stores.gql";
-import RESIDENTS from "src/graphql/Customers.gql";
+import PASSRECORD from "src/graphql/PassRecord.gql";
+import PASSRECORD_UPSERT from "src/graphql/PassRecordUpsert.gql";
+import PASSRECORD_DELETE from "src/graphql/PassRecordDelete.gql";
+import COMMUNITIES from "src/graphql/Communities.gql";
+import RESIDENTS from "src/graphql/Residents.gql";
 import { DatePicker } from "element-ui";
 import objectToInput from "src/util/objectToInput";
 
@@ -126,7 +62,7 @@ export default {
       }
     },
     communities: {
-      query: COMMUNITYS
+      query: COMMUNITIES
     }
   },
   methods: {

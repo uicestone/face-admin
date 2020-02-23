@@ -1,56 +1,27 @@
-<template>
-  <div class="row">
-    <div class="col-md-12">
-      <!-- <h4 class="title">所有居民</h4> -->
-    </div>
-    <div class="col-md-12 card">
-      <div class="card-header">
-        <div class="category"></div>
-      </div>
-      <div class="card-body row">
-        <div class="col-sm-6"></div>
-        <div class="col-sm-6">
-          <div class="pull-right">
-            <fg-input
-              class="input-sm"
-              placeholder="搜索"
-              v-model="searchQuery.keyword"
-              addon-right-icon="nc-icon nc-zoom-split"
-            >
-            </fg-input>
-          </div>
-        </div>
-        <div class="col-sm-12 mt-3 mb-3">
-          <el-table
-            class="table-striped"
-            :data="residents"
-            border
-            @row-click="showDetail"
-            style="width: 100%"
-          >
-            <el-table-column prop="user.name" label="名称"></el-table-column>
-            <el-table-column prop="mobile" label="手机"></el-table-column>
-            <el-table-column
-              prop="children.length"
-              label="孩子"
-            ></el-table-column>
-          </el-table>
-        </div>
-        <div class="col-sm-6 pagination-info">
-          <p class="category">{{ from + 1 }} - {{ to }} / {{ total }}</p>
-        </div>
-        <div class="col-sm-6">
-          <p-pagination
-            class="pull-right"
-            v-model="pagination.currentPage"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          >
-          </p-pagination>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  .row
+    .col-md-12
+      // h4.title 所有居民
+    .col-md-12.card
+      .card-header
+        .category
+      .card-body.row
+        .col-sm-2
+          p-button.m-0(type='info', @click='showDetail') 添加居民
+        .col-sm-10
+          .pull-right
+            fg-input.input-sm(placeholder='搜索', v-model='searchQuery.keyword', addon-right-icon='nc-icon nc-zoom-split')
+        .col-sm-12.mt-3.mb-3
+          el-table.table-striped(:data='residents', border='', @row-click='showDetail', style='width: 100%')
+            el-table-column(prop='name', label='名称')
+            el-table-column(prop='level', label='等级')
+            el-table-column(prop='unit.building', label='孩子')
+        .col-sm-6.pagination-info
+          p.category {{ residents.length }} 项已加载
+        .col-sm-6.text-right
+          p-button.my-0(type="primary" size="sm" v-if="pagination.hasMore" @click="loadMore") 加载更多
+          p.category(v-else) 没有更多项
+
 </template>
 <script>
 import Vue from "vue";
@@ -84,10 +55,12 @@ export default {
   data() {
     return {
       pagination: {
-        perPage: 10,
+        perPage: 100,
         currentPage: 1,
-        total: null
+        total: null,
+        hasMore: true
       },
+      residents: [],
       searchQuery: {}
     };
   },
@@ -102,18 +75,43 @@ export default {
       },
       result({
         data: {
-          totalCount: {
-            aggregate: { count }
-          }
+          residents
+          // totalCount: {
+          //   aggregate: { count }
+          // }
         }
       }) {
-        this.pagination.total = count;
+        this.pagination.hasMore = residents.length === this.pagination.perPage;
       }
     }
   },
   methods: {
     showDetail(item) {
-      this.$router.push(`/resident/${item.id}`);
+      this.$router.push(`/resident/${item.id || "new"}`);
+    },
+    loadMore() {
+      this.pagination.currentPage++;
+      // Fetch more data and transform the original result
+
+      this.$apollo.queries.residents.fetchMore({
+        // New variables
+        variables: {
+          limit: this.pagination.perPage,
+          offset: this.pagination.perPage * (this.pagination.currentPage - 1)
+        },
+        // Transform the previous result with new data
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newItems = fetchMoreResult.residents;
+          const hasMore =
+            fetchMoreResult.residents.length === this.pagination.perPage;
+
+          this.pagination.hasMore = hasMore;
+
+          return {
+            residents: [...previousResult.residents, ...newItems]
+          };
+        }
+      });
     }
   }
 };

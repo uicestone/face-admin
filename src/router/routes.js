@@ -17,11 +17,11 @@ import TimeLine from "src/components/Dashboard/Views/Pages/TimeLinePage.vue";
 import Login from "src/components/Dashboard/Views/Pages/Login.vue";
 import Register from "src/components/Dashboard/Views/Pages/Register.vue";
 import Lock from "src/components/Dashboard/Views/Pages/Lock.vue";
-// import UserList from "src/components/Dashboard/Views/User/UserList.vue";
-// import PassRecordList from "src/components/Dashboard/Views/PassRecord/PassRecordList.vue";
-// import PassRecord from "src/components/Dashboard/Views/PassRecord/PassRecord.vue";
-// import ResidentList from "src/components/Dashboard/Views/Resident/ResidentList.vue";
-// import Resident from "src/components/Dashboard/Views/Resident/Resident.vue";
+import UserList from "src/components/Dashboard/Views/User/UserList.vue";
+import PassRecordList from "src/components/Dashboard/Views/PassRecord/PassRecordList.vue";
+import PassRecord from "src/components/Dashboard/Views/PassRecord/PassRecord.vue";
+import ResidentList from "src/components/Dashboard/Views/Resident/ResidentList.vue";
+import Resident from "src/components/Dashboard/Views/Resident/Resident.vue";
 import CommunityList from "src/components/Dashboard/Views/Community/CommunityList.vue";
 import Community from "src/components/Dashboard/Views/Community/Community.vue";
 
@@ -221,68 +221,68 @@ let pagesMenu = {
   ]
 };
 
-// let passRecordMenu = {
-//   path: "/passRecord",
-//   component: DashboardLayout,
-//   redirect: "/passRecord/list",
-//   children: [
-//     {
-//       path: "list",
-//       name: "通行记录",
-//       component: PassRecordList,
-//       meta: {
-//         keepAlive: true
-//       }
-//     },
-//     {
-//       path: ":id",
-//       name: "通行记录",
-//       component: PassRecord
-//     }
-//   ]
-// };
+let passRecordMenu = {
+  path: "/pass-record",
+  component: DashboardLayout,
+  redirect: "/pass-record/list",
+  children: [
+    {
+      path: "list",
+      name: "通行记录",
+      component: PassRecordList,
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: ":id",
+      name: "通行记录详情",
+      component: PassRecord
+    }
+  ]
+};
 
-// let residentMenu = {
-//   path: "/resident",
-//   component: DashboardLayout,
-//   redirect: "/resident/list",
-//   children: [
-//     {
-//       path: "list",
-//       name: "所有居民",
-//       component: ResidentList,
-//       meta: {
-//         keepAlive: true
-//       }
-//     },
-//     {
-//       path: ":id",
-//       name: "居民详情",
-//       component: Resident
-//     }
-//   ]
-// };
+let residentMenu = {
+  path: "/resident",
+  component: DashboardLayout,
+  redirect: "/resident/list",
+  children: [
+    {
+      path: "list",
+      name: "所有居民",
+      component: ResidentList,
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: ":id",
+      name: "居民详情",
+      component: Resident
+    }
+  ]
+};
 
-// let userMenu = {
-//   path: "/user",
-//   component: DashboardLayout,
-//   redirect: "/user/list",
-//   children: [
-//     {
-//       path: "list",
-//       name: "所有用户",
-//       component: UserList,
-//       meta: {
-//         keepAlive: true
-//       }
-//     },
-//     {
-//       path: ":id",
-//       name: "用户详情",
-//       component: User
-//     }
-//   ]
-// };
+let userMenu = {
+  path: "/user",
+  component: DashboardLayout,
+  redirect: "/user/list",
+  children: [
+    {
+      path: "list",
+      name: "所有用户",
+      component: UserList,
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: ":id",
+      name: "用户详情",
+      component: User
+    }
+  ]
+};
 
 let communityMenu = {
   path: "/community",
@@ -346,9 +346,9 @@ const routes = [
   tablesMenu,
   mapsMenu,
   pagesMenu,
-  // passRecordMenu,
-  // residentMenu,
-  // userMenu,
+  passRecordMenu,
+  residentMenu,
+  userMenu,
   communityMenu,
   loginPage,
   registerPage,

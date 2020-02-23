@@ -1,25 +1,15 @@
-#import "./BookingFragment.gql"
+#import "./PassRecordFragment.gql"
 
-mutation booking ($data: booking_insert_input!, $id: Int) {
-  a: delete_booking_service(where: {
-    bookingId:{_eq: $id}
-  }){
-    affected_rows
-  }
-  booking: insert_booking (objects: [$data], on_conflict: {
-      constraint: PK_49171efc69702ed84c812f33540,
-      update_columns: [
-        status,
-        date,
-        slots,
-        remarks,
-        storeId,
-        childId,
-        customerId
-      ]
-    }) {
-    returning {
-      ...booking
-    }
+mutation passRecord(
+  $where: PassRecordWhereUniqueInput!
+  $create: PassRecordCreateInput!
+  $update: PassRecordUpdateInput!
+) {
+  passRecord: upsertOnePassRecord(
+    where: $where
+    create: $create
+    update: $update
+  ) {
+    ...PassRecord
   }
 }
