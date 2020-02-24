@@ -7,15 +7,21 @@
         .category
       .card-body.row
         .col-sm-2
-          p-button.m-0(type='info', @click='showDetail') 添加居民
+          //- p-button.m-0(type='info', @click='showDetail') 添加居民
         .col-sm-10
           .pull-right
             fg-input.input-sm(placeholder='搜索', v-model='searchQuery.keyword', addon-right-icon='nc-icon nc-zoom-split')
         .col-sm-12.mt-3.mb-3
           el-table.table-striped(:data='residents', border='', @row-click='showDetail', style='width: 100%')
-            el-table-column(prop='name', label='名称')
+            el-table-column(label='照片' width='100')
+              template(slot-scope='scope')
+                img(:src="'https://face.codeispoetry.tech/static/'+scope.row.id+'.png'")
+            el-table-column(prop='name', label='姓名')
             el-table-column(prop='level', label='等级')
-            el-table-column(prop='unit.building', label='孩子')
+            el-table-column(label='单元')
+              template(slot-scope='scope')
+                span(v-if="scope.row.unit") {{ scope.row.unit.building }}-{{ scope.row.unit.room }}
+                span(v-else) -
         .col-sm-6.pagination-info
           p.category {{ residents.length }} 项已加载
         .col-sm-6.text-right

@@ -1,78 +1,33 @@
-<template>
-  <div class="card mt-5">
-    <div class="card-header">
-      <h4 class="title mt-3 mb-3 ml-3">用户资料</h4>
-    </div>
-    <div class="card-body p-4">
-      <form>
-        <div class="row">
-          <div class="col-md-4">
-            <fg-input type="text" label="名称" v-model="user.name"> </fg-input>
-          </div>
-          <div class="col-md-4">
-            <fg-input type="text" label="性别" v-model="user.sex"> </fg-input>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group has-label">
-              <label>生日</label>
-              <el-date-picker
-                v-model="user.birthday"
-                type="date"
-                placeholder="选择日期"
-                default-value="1980-01-01"
-                value-format="yyyy-MM-dd"
-              >
-              </el-date-picker>
-            </div>
-          </div>
-        </div>
+<template lang="pug">
+  .card.mt-5
+    .card-header
+      h4.title.mt-3.mb-3.ml-3 用户资料
+    .card-body.p-4
+      form
+        .row
+          .col-md-4
+            fg-input(type='text', label='名称', v-model='user.name')  
+          .col-md-4
+            fg-input(type='text', label='性别', v-model='user.sex')  
+          .col-md-4
+            .form-group.has-label
+              label 生日
+              el-date-picker(v-model='user.birthday', type='date', placeholder='选择日期', default-value='1980-01-01', value-format='yyyy-MM-dd')
+        .row
+          .col-md-4
+            fg-input(type='text', label='用户名', v-model='user.login')
+          .col-md-4
+            .form-group.has-label
+              label 角色
+              el-select(v-model='user.role', placeholder='选择角色', size='medium')
+                el-option(v-for='item in roles', :key='item.value', :label='item.label', :value='item.value')
+          .col-md-4
+            fg-input(type='password', label='重置密码', v-model='user.password', autocomplete='new-password')
+        .text-center.mt-3
+          button.btn.btn-info.btn-fill.btn-wd(type='submit', @click.prevent='updateProfile')
+            | 更新用户资料
+        .clearfix
 
-        <div class="row">
-          <div class="col-md-4">
-            <fg-input type="text" label="用户名" v-model="user.login">
-            </fg-input>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group has-label">
-              <label>角色</label>
-              <el-select
-                v-model="user.role"
-                placeholder="选择角色"
-                size="medium"
-              >
-                <el-option
-                  v-for="item in roles"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <fg-input
-              type="password"
-              label="重置密码"
-              v-model="user.password"
-              autocomplete="new-password"
-            >
-            </fg-input>
-          </div>
-        </div>
-        <div class="text-center mt-3">
-          <button
-            type="submit"
-            class="btn btn-info btn-fill btn-wd"
-            @click.prevent="updateProfile"
-          >
-            更新用户资料
-          </button>
-        </div>
-        <div class="clearfix"></div>
-      </form>
-    </div>
-  </div>
 </template>
 <script>
 import USER from "src/graphql/User.gql";

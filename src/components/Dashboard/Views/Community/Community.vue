@@ -19,7 +19,7 @@
               .col-md-12
                 fg-input(type='text' label='地址' v-model='item.address')
             .text-center.mt-3
-              button.btn.btn-info.btn-fill.btn-wd(type='submit' @click.prevent='update')
+              button.btn.btn-info.btn-fill.btn-wd(type='submit' @click.prevent='save')
                 | {{ item.id ? "更新社区" : "新增社区" }}
             .clearfix
 </template>
@@ -28,16 +28,8 @@ import moment from "moment";
 import COMMUNITY from "src/graphql/Community.gql";
 import COMMUNITY_UPSERT from "src/graphql/CommunityUpsert.gql";
 import USERS from "src/graphql/Users.gql";
-import objectToInput from "src/util/objectToInput";
-import TagsInput from "../Components/TagsInput";
-import Vue from "vue";
-import { Slider } from "element-ui";
-Vue.use(Slider);
 
 export default {
-  components: {
-    TagsInput
-  },
   data() {
     return {
       community: {},
@@ -69,7 +61,7 @@ export default {
     }
   },
   methods: {
-    async update() {
+    async save() {
       try {
         const result = await this.$apollo.mutate({
           mutation: COMMUNITY_UPSERT,

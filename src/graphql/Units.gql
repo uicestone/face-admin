@@ -1,0 +1,22 @@
+#import "./UnitFragment.gql"
+
+query units(
+  $where: UnitWhereInput
+  $limit: Int
+  $offset: Int
+  $order_by: UnitOrderByInput
+) {
+  units: units(
+    where: $where
+    first: $limit
+    skip: $offset
+    orderBy: $order_by
+  ) {
+    ...Unit
+  }
+  # totalCount: community_aggregate {
+  #   aggregate {
+  #     count
+  #   }
+  # }
+}
