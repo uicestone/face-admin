@@ -4,7 +4,8 @@ query passRecords($limit: Int, $offset: Int, $where: PassRecordWhereInput) {
   passRecords: passRecords(
     first: $limit
     skip: $offset
-    where: $where # orderBy: { createdAt: desc }
+    where: $where
+    orderBy: { date: desc }
   ) {
     ...PassRecord
   }

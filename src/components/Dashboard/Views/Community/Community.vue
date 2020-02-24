@@ -142,7 +142,7 @@ export default {
       this.users = users;
     },
     clearManagerSelect() {
-      this.community.manager = null;
+      this.item.manager = null;
     },
     numberToDay(day) {
       return moment()
