@@ -119,6 +119,9 @@ export default {
         }
       });
     }
+  },
+  activated() {
+    this.$apollo.queries.residents.refetch();
   }
 };
 </script>

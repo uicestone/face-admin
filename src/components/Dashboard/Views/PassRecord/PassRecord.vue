@@ -19,7 +19,7 @@
               .col-md-4
                 .form-group.has-label
                   label 小区
-                  el-select(v-model='passRecord.community', value-key='id', placeholder='选择小区', size='medium')
+                  el-select(v-model='item.community', value-key='id', placeholder='选择小区', size='medium')
                     el-option(v-for='community in communities', :key='community.id', :label='community.name', :value='community')
               .col-md-4
                 .form-group.has-label

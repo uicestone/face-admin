@@ -112,6 +112,9 @@ export default {
         }
       });
     }
+  },
+  activated() {
+    this.$apollo.queries.users.refetch();
   }
 };
 </script>

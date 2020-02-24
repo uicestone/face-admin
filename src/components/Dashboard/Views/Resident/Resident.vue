@@ -8,7 +8,7 @@
           form
             .row
               .col-md-4.text-center
-                img.face-img(:src="'https://face.codeispoetry.tech/static/'+item.id+'.png'" width="75%")
+                img.face-img(v-if="item.id" :src="'https://face.codeispoetry.tech/static/'+item.id+'.png'" width="75%")
                 //- span(v-if='item.user.openid') 微信已绑定
               .col-md-8.row
                 .col-md-6
@@ -21,7 +21,7 @@
                     el-option(v-if='!units.length && item.unit' :key='item.unit.id' :label="item.unit.building+'-'+item.unit.room" :value='item.unit')
                     el-option(v-for='u in units' :key='u.id' :label="u.building+'-'+u.room" :value='u')
                 .col-md-6
-                  fg-input(type='text', label='小区', v-model='item.community.name' disabled)
+                  fg-input(type='text', label='小区', v-model='item.community.name' v-if="item.community" disabled)
             .text-center.mt-3
               button.btn.btn-info.btn-fill.btn-wd(type='submit', @click.prevent='save')
                 | {{ item.id ? "更新居民" : "新增居民" }}

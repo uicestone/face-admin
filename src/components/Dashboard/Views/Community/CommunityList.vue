@@ -113,6 +113,9 @@ export default {
         }
       });
     }
+  },
+  activated() {
+    this.$apollo.queries.communities.refetch();
   }
 };
 </script>

@@ -194,6 +194,9 @@ export default {
         .local()
         .format(format);
     }
+  },
+  activated() {
+    this.$apollo.queries.passRecords.refetch();
   }
 };
 </script>

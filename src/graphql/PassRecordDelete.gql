@@ -1,9 +1,5 @@
-#import "./PassRecordFragment.gql"
-
-mutation passRecord($id: Int!) {
-  passRecord: delete_passRecord(where: { id: { _eq: $id } }) {
-    returning {
-      ...passRecord
-    }
+mutation passRecord($id: String!) {
+  passRecord: deleteOnePassRecord(where: { id: $id }) {
+    id
   }
 }
