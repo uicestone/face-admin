@@ -9,20 +9,34 @@
             .row
               .col-md-4
                 label 居民
-                el-select(v-model='passRecord.resident', value-key='id', placeholder='搜索居民', filterable='', remote='', :remote-method='searchCustomers')
-                  el-option(v-if='!residents.length', :key='passRecord.resident.id', :label='passRecord.resident.name', :value='passRecord.resident')
-                  el-option(v-for='item in residents', :key='item.id', :label='item.user.name', :value='item')
+                el-select(v-model='item.resident', value-key='id', placeholder='搜索居民', filterable='', remote='', :remote-method='searchResidents')
+                  el-option(v-if='!residents.length && item.resident', :key='item.resident.id', :label='item.resident.name', :value='item.resident')
+                  el-option(v-for='r in residents', :key='r.id', :label='r.name', :value='r')
               .col-md-4
                 .form-group.has-label
-                  label 日期
-                  el-date-picker(v-model='passRecord.date', type='date', placeholder='选择日期', value-format='yyyy-MM-dd')
+                  label 日期时间
+                  el-date-picker(v-model='item.date', type='datetime', placeholder='选择日期时间')
               .col-md-4
                 .form-group.has-label
                   label 小区
                   el-select(v-model='passRecord.community', value-key='id', placeholder='选择小区', size='medium')
                     el-option(v-for='community in communities', :key='community.id', :label='community.name', :value='community')
+              .col-md-4
+                .form-group.has-label
+                  label 是否允许
+                  .form-control-static
+                    el-radio-group(v-model='item.allow')
+                      el-radio-button(:label='true') 允许
+                      el-radio-button(:label='false') 禁止
+              .col-md-4
+                .form-group.has-label
+                  label 通行方向
+                  .form-control-static
+                    el-radio-group(v-model='item.direction')
+                      el-radio-button(label='IN') 进入
+                      el-radio-button(label='OUT') 外出
             .text-center.mt-3
-              button.btn.btn-info.btn-fill.btn-wd(type='submit', @click.prevent='save')
+              button.btn.btn-info.btn-fill.btn-wd.mr-3(type='submit', @click.prevent='save')
                 | {{ passRecord.id ? "更新通行记录" : "新增通行记录" }}
               button.btn.btn-danger.btn-fill.btn-wd(v-if='!passRecord.payments', @click.prevent='remove')
                 | 删除
@@ -35,16 +49,18 @@ import PASSRECORD_UPSERT from "src/graphql/PassRecordUpsert.gql";
 import PASSRECORD_DELETE from "src/graphql/PassRecordDelete.gql";
 import COMMUNITIES from "src/graphql/Communities.gql";
 import RESIDENTS from "src/graphql/Residents.gql";
-import { DatePicker } from "element-ui";
-import objectToInput from "src/util/objectToInput";
+import { DatePicker, RadioButton, RadioGroup } from "element-ui";
 
 export default {
   components: {
-    [DatePicker.name]: DatePicker
+    [DatePicker.name]: DatePicker,
+    [RadioButton.name]: RadioButton,
+    [RadioGroup.name]: RadioGroup
   },
   data() {
     return {
-      passRecord: { community: {}, child: {}, resident: { user: {} } },
+      passRecord: {},
+      item: {},
       residents: [],
       communities: []
     };
@@ -54,11 +70,21 @@ export default {
       query: PASSRECORD,
       variables() {
         return {
-          id: +this.$route.params.id
+          id: this.$route.params.id
         };
       },
       skip() {
         return this.$route.params.id === "new";
+      },
+      result({
+        data: {
+          passRecord
+          // totalCount: {
+          //   aggregate: { count }
+          // }
+        }
+      }) {
+        this.item = passRecord;
       }
     },
     communities: {
@@ -67,52 +93,86 @@ export default {
   },
   methods: {
     async save() {
-      const services = {
-        data: this.passRecord.services.map(passRecordService => ({
-          serviceId: passRecordService.service.id
-        })),
-        on_conflict: {
-          constraint: "PK_816bd86a38b5b03368b66527146",
-          update_columns: []
-        }
-      };
-      const {
-        data: {
-          passRecord: {
-            returning: [passRecord]
+      try {
+        const result = await this.$apollo.mutate({
+          mutation: PASSRECORD_UPSERT,
+          variables: {
+            where: { id: this.item.id || "" },
+            create: {
+              ...this.item,
+              __typename: undefined,
+              id: undefined,
+              resident: this.item.resident
+                ? {
+                    connect: {
+                      id: this.item.resident.id
+                    }
+                  }
+                : undefined,
+              community: this.item.community
+                ? {
+                    connect: {
+                      id: this.item.community.id
+                    }
+                  }
+                : undefined
+            },
+            update: {
+              ...this.item,
+              __typename: undefined,
+              resident: this.item.resident
+                ? {
+                    connect: {
+                      id: this.item.resident.id
+                    }
+                  }
+                : this.passRecord.resident
+                ? {
+                    disconnect: true
+                  }
+                : undefined,
+              community: this.item.community
+                ? {
+                    connect: {
+                      id: this.item.community.id
+                    }
+                  }
+                : this.passRecord.community
+                ? {
+                    disconnect: true
+                  }
+                : undefined
+            }
           }
+        });
+
+        this.$notify({
+          message: "通行记录已保存",
+          icon: "nc-icon nc-check-2",
+          horizontalAlign: "center",
+          verticalAlign: "bottom",
+          type: "success"
+        });
+
+        const isNew = !this.passRecord.id;
+
+        this.passRecord = result.data.passRecord;
+
+        if (isNew) {
+          this.$router.replace(`/pass-record/${this.passRecord.id}`);
         }
-      } = await this.$apollo.mutate({
-        mutation: PASSRECORD_UPSERT,
-        variables: {
-          data: objectToInput({ ...this.passRecord, services }, ["payments"]),
-          id: this.passRecord.id
-        }
-      });
-
-      this.$notify({
-        message: "通行记录已保存",
-        icon: "nc-icon nc-check-2",
-        horizontalAlign: "center",
-        verticalAlign: "bottom",
-        type: "success"
-      });
-
-      const isNew = !this.passRecord.id;
-
-      this.passRecord = passRecord;
-
-      if (isNew) {
-        this.$router.replace(`/passRecord/${this.passRecord.id}`);
+      } catch (e) {
+        console.error(e);
+        const message = e.networkError.result.errors[0].message;
       }
     },
-    async searchCustomers(keyword) {
+    async searchResidents(keyword) {
       const {
         data: { residents }
       } = await this.$apollo.query({
         query: RESIDENTS,
         variables: {
-          where: { user: { name: { _like: keyword + "%" } } }
+          where: { name: { startsWith: keyword } }
         }
       });
 

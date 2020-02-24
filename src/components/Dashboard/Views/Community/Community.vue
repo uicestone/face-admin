@@ -135,7 +135,7 @@ export default {
       } = await this.$apollo.query({
         query: USERS,
         variables: {
-          where: { name: { startsWith: keyword + "%" } }
+          where: { name: { startsWith: keyword } }
         }
       });
 

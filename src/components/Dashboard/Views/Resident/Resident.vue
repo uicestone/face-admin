@@ -150,8 +150,8 @@ export default {
         query: UNITS,
         variables: {
           where: {
-            building: { startsWith: bk + "%" },
-            room: rk ? { startsWith: rk + "%" } : undefined
+            building: { startsWith: bk },
+            room: rk ? { startsWith: rk } : undefined
           }
         }
       });
